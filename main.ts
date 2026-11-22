@@ -1,12 +1,6 @@
-// tiny-stack-vm-01 entry: a full interpreter of make.fun's tiny stack ISA (ISA.md), matching the
-// reference vm.mjs byte for byte: 32-bit wrap, 256-deep data stack, 64-deep call stack, 256-word
-// memory, all 10 traps with their exit codes, step and output limits, input exhaustion, EXIT's low
-// byte. Answers /input/<id>/ with /output/<id>/stdout.bin + exit.txt.
 import { mkdirSync, readdirSync, readFileSync, readdirSync as rds, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-
 const STACK_MAX = 256, CALLS_MAX = 64, MEM = 256, STEP_LIMIT = 1e6, OUT_MAX = 65536;
-// opcode byte -> [immediate bytes, pops, pushes]
 const OPS = new Map([
   [0x00, [0,0,0]], [0x01, [1,0,1]], [0x02, [4,0,1]], [0x03, [0,1,0]],
   [0x04, [0,1,2]], [0x05, [0,2,2]], [0x06, [0,2,3]], [0x07, [0,3,3]],
@@ -19,7 +13,6 @@ const OPS = new Map([
   [0x41, [0,2,0]], [0x50, [0,1,0]], [0x51, [0,1,0]], [0x52, [0,0,1]],
   [0x53, [0,1,0]],
 ]);
-
 function run(p, inp) {
   const n = p.length;
   const D = new Int32Array(STACK_MAX);
@@ -119,7 +112,6 @@ function run(p, inp) {
     }
   }
 }
-
 const I = process.env.MAKEFUN_INPUT_DIR ?? '/input';
 const O = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 for (const id of readdirSync(I).sort()) {
